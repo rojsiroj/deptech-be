@@ -7,6 +7,7 @@ const config = require("./config/cloud.config");
 
 // Routers
 const userRoute = require("./routes/user.route");
+const healthRoute = require("./routes/health.route");
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +17,7 @@ const db = require("./models");
 db.sequelize.sync();
 
 app.use("/api/user", userRoute);
+app.use("/api/health", healthRoute);
 
 app.listen(config.port, () =>
   console.log(`App listening on port ${config.host}:${config.port}`)
