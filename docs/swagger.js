@@ -7,7 +7,7 @@ const messages = require("../utils/lang/messages");
 
 const doc = {
   info: {
-    version: "2.0.0",
+    version: "1.0.0",
     title: "Deptech Developer Test API",
     description: "Deptech Developer Test API",
     contact: {

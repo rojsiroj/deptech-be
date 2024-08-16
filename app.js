@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const config = require("./config/cloud.config");
+const { basicAuth } = require("./middlewares/basic-auth");
 
 // Routers
 const userRoute = require("./routes/user.route");
@@ -20,9 +21,14 @@ db.sequelize.sync();
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./docs/swagger.json");
 
-app.use("/api/user", userRoute);
 app.use("/api/health", healthRoute);
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/api/docs",
+  basicAuth,
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
+app.use("/api/v1/user", userRoute);
 
 app.listen(config.port, () =>
   console.log(`App listening on port ${config.host}:${config.port}`)
