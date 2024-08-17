@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const config = require("./config/cloud.config");
+const errorHandler = require("./utils/errorHandler");
 const { basicAuth } = require("./middlewares/basic-auth");
 
 // Routers
@@ -29,6 +30,7 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 );
 app.use("/api/v1/user", userRoute);
+app.use(errorHandler);
 
 app.listen(config.port, () =>
   console.log(`App listening on port ${config.host}:${config.port}`)
