@@ -9,6 +9,7 @@ const { basicAuth } = require("./middlewares/basic-auth");
 
 // Routers
 const userRoute = require("./routes/user.route");
+const productRoute = require("./routes/product.route");
 const healthRoute = require("./routes/health.route");
 
 app.use(cors());
@@ -30,6 +31,7 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 );
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/product", productRoute);
 app.use(errorHandler);
 app.use("/", (_, res) => {
   // #swagger.ignore = true
