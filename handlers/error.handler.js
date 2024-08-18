@@ -19,6 +19,7 @@ module.exports = (err, req, res, next) => {
       status = 401;
       message = err.name;
       break;
+    case "Token not found":
     case "Invalid token":
     case "User in token not found":
     case "JsonWebTokenError":

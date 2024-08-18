@@ -1,22 +1,30 @@
+const saltRounds = 10;
+const bcrypt = require("bcrypt");
 const { User } = require("../models");
 const messages = require("../utils/lang/messages");
 
 const create = async (req, res) => {
   // #swagger.tags = ['Admin']
   try {
-    const { description } = req.body;
+    const { first_name, last_name, email, dob, password, gender } = req.body;
 
-    const data = {
-      status: "OPEN",
-      description,
-    };
+    const data = { first_name, last_name, email, dob, gender };
 
-    User.create(data)
-      .then((data) => {
-        res.status(messages.response.c201.code).json({
-          message: messages.response.c201.message,
-          data: data,
-        });
+    bcrypt
+      .hash(password, saltRounds)
+      .then(async (hash) => {
+        data.password = hash;
+
+        User.create(data)
+          .then((data) => {
+            res.status(messages.response.c201.code).json({
+              message: messages.response.c201.message,
+              data: data,
+            });
+          })
+          .catch((error) => {
+            next(error);
+          });
       })
       .catch((error) => {
         next(error);
@@ -43,18 +51,84 @@ const detail = async (req, res) => {
   // #swagger.tags = ['Admin']
   try {
     const { id } = req.params;
-    const data = await User.findByPk(id);
-    if (data === null) {
+    const user = await User.findByPk(id);
+    if (user === null) {
       return res.status(messages.response.c404.code).json({
         message: messages.response.c404.message,
-        data,
+        data: user,
       });
     }
 
     res.status(messages.response.c200.code).json({
       message: messages.response.c200.message,
-      data,
+      data: user,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const update = async (req, res) => {
+  // #swagger.tags = ['Admin']
+  try {
+    const { id } = req.params;
+    const { first_name, last_name, email, dob, gender } = req.body;
+
+    const user = await User.findByPk(id);
+    if (user === null) {
+      return res.status(messages.response.c404.code).json({
+        message: messages.response.c404.message,
+        data: user,
+      });
+    }
+
+    user
+      .update({
+        first_name,
+        last_name,
+        email,
+        dob,
+        gender,
+        updatedAt: new Date(),
+      })
+      .then((data) => {
+        return res.status(messages.response.c200.code).json({
+          message: messages.response.c200.message,
+          data,
+        });
+      })
+      .catch((error) => {
+        next(error);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const destroy = async (req, res) => {
+  // #swagger.tags = ['Admin']
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByPk(id);
+    if (user === null) {
+      return res.status(messages.response.c404.code).json({
+        message: messages.response.c404.message,
+        data: user,
+      });
+    }
+
+    user
+      .destroy()
+      .then((data) => {
+        return res.status(messages.response.c200.code).json({
+          message: messages.response.c200.message,
+          data,
+        });
+      })
+      .catch((error) => {
+        next(error);
+      });
   } catch (error) {
     next(error);
   }
@@ -64,4 +138,6 @@ module.exports = {
   create,
   list,
   detail,
+  update,
+  destroy,
 };

@@ -1,7 +1,7 @@
 const messages = require("../utils/lang/messages");
 const { validationResult } = require("express-validator");
 
-exports.handleValidationErrors = (req, res, next) => {
+exports.handleCommonValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) return next();
 
