@@ -56,14 +56,6 @@ const create = async (req, res, next) => {
         let promises = [];
 
         products.forEach(async (product) => {
-          const productData = await Product.findByPk(product.id);
-          if (type === "out") {
-            productData.stock = productData.stock - product.quantity;
-          } else {
-            productData.stock = productData.stock + product.quantity;
-          }
-          productData.save();
-
           promises.push(
             ProductTransaction.create({
               product: product.id,
@@ -75,6 +67,16 @@ const create = async (req, res, next) => {
 
         Promise.all(promises)
           .then((data) => {
+            products.forEach(async (product) => {
+              const productData = await Product.findByPk(product.id);
+              if (type === "out") {
+                productData.stock = productData.stock - product.quantity;
+              } else {
+                productData.stock = productData.stock + product.quantity;
+              }
+              productData.save();
+            });
+
             return res.status(messages.response.c201.code).json({
               message: messages.response.c201.message,
               data,
