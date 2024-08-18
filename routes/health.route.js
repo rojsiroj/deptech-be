@@ -1,6 +1,8 @@
 const router = require("express").Router();
 
 router.get("/", async (_req, res, _next) => {
+  // #swagger.tags = ['Health Check']
+
   // TODO: add further things to check (e.g. connecting to dababase)
   const healthcheck = {
     uptime: process.uptime(),

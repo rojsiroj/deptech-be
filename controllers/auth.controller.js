@@ -1,20 +1,19 @@
-require("dotenv").config();
-
-const { User } = require("../models");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const jwt = require("jsonwebtoken");
+const { User } = require("../models");
+const messages = require("../utils/lang/messages");
 
 exports.login = async (req, res, next) => {
+  // #swagger.tags = ['Auth']
   try {
-    let { email, password } = req.body;
+    const { email, password } = req.body;
     if (!email) {
       throw { name: "Email is required" };
     }
 
     if (!password) throw { name: "Password is required" };
 
-    let user = await User.findOne({
+    const user = await User.scope("withPassword").findOne({
       where: {
         email,
       },
@@ -26,11 +25,11 @@ exports.login = async (req, res, next) => {
         if (err) throw { name: "Invalid credencial" };
 
         if (data) {
-          let access_token = jwt.sign({ id: user.id }, "secretKey", {
+          const access_token = jwt.sign({ id: user.id }, "secretKey", {
             expiresIn: "1h",
           });
-          return res.status(200).json({
-            message: "Successfully logged in",
+          return res.status(messages.response.c200.code).json({
+            message: messages.response.c200.message,
             data: { access_token },
           });
         } else {

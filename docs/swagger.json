@@ -24,6 +24,9 @@
   "paths": {
     "/api/health/": {
       "get": {
+        "tags": [
+          "Health Check"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -37,6 +40,9 @@
     },
     "/api/v1/user/auth/login": {
       "post": {
+        "tags": [
+          "Auth"
+        ],
         "description": "",
         "parameters": [
           {
@@ -56,133 +62,54 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/api/v1/user/admin/create": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "contact": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/v1/user/admin/delete": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "contact": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/v1/user/profile": {
+    "/api/v1/user/admin/list": {
       "get": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      },
-      "put": {
+        "tags": [
+          "Admin"
+        ],
         "description": "",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "contact": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/user/admin/detail/{id}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           },
-          "400": {
-            "description": "Bad Request"
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
@@ -237,7 +164,7 @@
         },
         "message": {
           "type": "string",
-          "example": "Not Found"
+          "example": "Data Not Found"
         }
       }
     },

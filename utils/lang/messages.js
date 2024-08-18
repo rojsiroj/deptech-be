@@ -4,6 +4,10 @@ module.exports = {
       code: 200,
       message: "OK",
     },
+    c201: {
+      code: 201,
+      message: "Created",
+    },
     c400: {
       code: 400,
       message: "Bad Request",
@@ -14,7 +18,11 @@ module.exports = {
     },
     c404: {
       code: 404,
-      message: "Not Found",
+      message: "Data Not Found",
+    },
+    c422: {
+      code: 422,
+      message: "Unprocessable Entity",
     },
     c500: {
       code: 500,

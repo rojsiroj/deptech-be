@@ -25,10 +25,19 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      hooks: {
+        beforeCreate: (user) => (user.id = uuid.v4()),
+      },
+      defaultScope: {
+        attributes: { exclude: ["password"] },
+      },
+      scopes: {
+        withPassword: {
+          attributes: {},
+        },
+      },
     }
   );
-
-  User.beforeCreate((user) => (user.id = uuid.v4()));
 
   return User;
 };

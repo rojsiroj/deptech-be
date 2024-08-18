@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const config = require("./config/cloud.config");
-const errorHandler = require("./utils/errorHandler");
+const errorHandler = require("./handlers/error.handler");
 const { basicAuth } = require("./middlewares/basic-auth");
 
 // Routers
@@ -31,6 +31,12 @@ app.use(
 );
 app.use("/api/v1/user", userRoute);
 app.use(errorHandler);
+app.use("/", (_, res) => {
+  // #swagger.ignore = true
+  res.json({
+    message: "Welcome to Deptech Developer Test API",
+  });
+});
 
 app.listen(config.port, () =>
   console.log(`App listening on port ${config.host}:${config.port}`)

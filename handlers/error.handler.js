@@ -39,5 +39,5 @@ module.exports = (err, req, res, next) => {
       message = err.name;
       break;
   }
-  res.status(status).json({ message });
+  res.status(status).json({ message, data: null });
 };
