@@ -1,8 +1,7 @@
 require("dotenv").config();
 
-const express = require("express");
 const cors = require("cors");
-const app = express();
+const express = require("express");
 const config = require("./config/cloud.config");
 const errorHandler = require("./handlers/error.handler");
 const { basicAuth } = require("./middlewares/basic-auth");
@@ -12,9 +11,12 @@ const userRoute = require("./routes/user.route");
 const productRoute = require("./routes/product.route");
 const healthRoute = require("./routes/health.route");
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+global.__basedir = __dirname;
 
 const db = require("./models");
 db.sequelize.sync();
@@ -32,6 +34,7 @@ app.use(
 );
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(errorHandler);
 app.use("/", (_, res) => {
   // #swagger.ignore = true

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models");
 const messages = require("../utils/lang/messages");
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   // #swagger.tags = ['Admin']
   try {
     const { first_name, last_name, email, dob, password, gender } = req.body;
@@ -34,7 +34,7 @@ const create = async (req, res) => {
   }
 };
 
-const list = async (_, res) => {
+const list = async (_, res, next) => {
   // #swagger.tags = ['Admin']
   try {
     const result = await User.findAndCountAll();
@@ -47,7 +47,7 @@ const list = async (_, res) => {
   }
 };
 
-const detail = async (req, res) => {
+const detail = async (req, res, next) => {
   // #swagger.tags = ['Admin']
   try {
     const { id } = req.params;
@@ -68,7 +68,7 @@ const detail = async (req, res) => {
   }
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   // #swagger.tags = ['Admin']
   try {
     const { id } = req.params;
@@ -105,7 +105,7 @@ const update = async (req, res) => {
   }
 };
 
-const destroy = async (req, res) => {
+const destroy = async (req, res, next) => {
   // #swagger.tags = ['Admin']
   try {
     const { id } = req.params;

@@ -1,7 +1,7 @@
 const { ProductCategory } = require("../models");
 const messages = require("../utils/lang/messages");
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   // #swagger.tags = ['Product Categories']
   try {
     const { name, description } = req.body;
@@ -23,7 +23,7 @@ const create = async (req, res) => {
   }
 };
 
-const list = async (_, res) => {
+const list = async (_, res, next) => {
   // #swagger.tags = ['Product Categories']
   try {
     const result = await ProductCategory.findAndCountAll();
@@ -36,7 +36,7 @@ const list = async (_, res) => {
   }
 };
 
-const detail = async (req, res) => {
+const detail = async (req, res, next) => {
   // #swagger.tags = ['Product Categories']
   try {
     const { id } = req.params;
@@ -57,7 +57,7 @@ const detail = async (req, res) => {
   }
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   // #swagger.tags = ['Product Categories']
   try {
     const { id } = req.params;
@@ -87,7 +87,7 @@ const update = async (req, res) => {
   }
 };
 
-const destroy = async (req, res) => {
+const destroy = async (req, res, next) => {
   // #swagger.tags = ['Product Categories']
   try {
     const { id } = req.params;

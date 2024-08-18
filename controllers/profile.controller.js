@@ -1,7 +1,7 @@
 const { User } = require("../models");
 const messages = require("../utils/lang/messages");
 
-const detail = async (req, res) => {
+const detail = async (req, res, next) => {
   // #swagger.tags = ['Profile']
   try {
     const { userId } = req.user;
@@ -23,7 +23,7 @@ const detail = async (req, res) => {
   }
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   // #swagger.tags = ['Profile']
   try {
     const { userId } = req.user;

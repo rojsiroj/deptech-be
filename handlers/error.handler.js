@@ -1,6 +1,24 @@
 module.exports = (err, req, res, next) => {
+  console.log(err);
+  console.log(err.message);
+
   let status = err.status || 500;
   let message = err.message || "Internal server error";
+
+  switch (err.message) {
+    case "jwt expired":
+      status = 401;
+      message = "Token expired";
+      break;
+    case "Please upload only images.":
+      status = 400;
+      message = err.message;
+      break;
+    default:
+      status = 500;
+      message = "Internal server error";
+      break;
+  }
 
   switch (err.name) {
     case "SequelizeValidationError":

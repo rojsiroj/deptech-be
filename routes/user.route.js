@@ -15,6 +15,7 @@ const {
 const profileController = require("../controllers/profile.controller");
 const { updateProfileValidation } = require("../validators/profile.validator");
 
+// Auth Routes
 router.post(
   "/auth/login",
   loginValidation,
@@ -22,6 +23,7 @@ router.post(
   authController.login
 );
 
+// Admin Routes
 router.post(
   "/admin/create",
   authentication,
@@ -40,6 +42,7 @@ router.put(
 );
 router.delete("/admin/delete/:id", authentication, adminController.destroy);
 
+// Profile Routes
 router.get("/profile", authentication, profileController.detail);
 router.put(
   "/profile",
