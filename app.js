@@ -9,6 +9,7 @@ const { basicAuth } = require("./middlewares/basic-auth");
 // Routers
 const userRoute = require("./routes/user.route");
 const productRoute = require("./routes/product.route");
+const transactionRoute = require("./routes/transaction.route");
 const healthRoute = require("./routes/health.route");
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(
 );
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/transaction", transactionRoute);
 app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(errorHandler);
 app.use("/", (_, res) => {

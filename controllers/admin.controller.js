@@ -30,7 +30,7 @@ const create = async (req, res, next) => {
         next(error);
       });
   } catch (error) {
-    res.json(error).status(422);
+    next(error);
   }
 };
 

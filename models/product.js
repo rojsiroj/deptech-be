@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "product_category",
         as: "category",
       });
+      Product.belongsToMany(models.Transaction, {
+        through: "ProductTransactions",
+      });
     }
   }
   Product.init(
@@ -28,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       image_url: {
         type: DataTypes.VIRTUAL,
         get() {
+          if (!this.image) return null;
           return `${process.env.API_PROTOCOL}://${process.env.API_HOST}:${process.env.API_PORT}/${this.image}`;
         },
         set(value) {
