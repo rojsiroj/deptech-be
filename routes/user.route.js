@@ -12,7 +12,8 @@ const {
   updateAdminValidation,
 } = require("../validators/admin.validator");
 
-// const profileController = require("../controllers/profile.controller");
+const profileController = require("../controllers/profile.controller");
+const { updateProfileValidation } = require("../validators/profile.validator");
 
 router.post(
   "/auth/login",
@@ -23,23 +24,29 @@ router.post(
 
 router.post(
   "/admin/create",
+  authentication,
   createAdminValidation,
   handleCommonValidation,
-  authentication,
   adminController.create
 );
 router.get("/admin/list", authentication, adminController.list);
 router.get("/admin/detail/:id", authentication, adminController.detail);
 router.put(
   "/admin/update/:id",
+  authentication,
   updateAdminValidation,
   handleCommonValidation,
-  authentication,
   adminController.update
 );
 router.delete("/admin/delete/:id", authentication, adminController.destroy);
 
-// router.get("/profile", profileController.register);
-// router.put("/profile", profileController.register);
+router.get("/profile", authentication, profileController.detail);
+router.put(
+  "/profile",
+  authentication,
+  updateProfileValidation,
+  handleCommonValidation,
+  profileController.update
+);
 
 module.exports = router;
