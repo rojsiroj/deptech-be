@@ -1,49 +1,44 @@
 const { Transaction, Product, ProductTransaction } = require("../models");
 const messages = require("../utils/lang/messages");
 
-const create = async (req, res, next) => {
+const create = (req, res, next) => {
   // #swagger.tags = ['Transaction']
   try {
     let { type, products } = req.body;
 
     if (products.length === 0) {
-      return res.status(messages.response.c400.code).json({
-        message: "products is required",
-        data: null,
-      });
+      throw { name: "products is required" };
     }
 
     const productDatas = [];
 
-    products.forEach(async (product) => {
+    products.forEach((product) => {
       if (product.hasOwnProperty("id")) {
-        const productData = await Product.findByPk(product.id);
-        if (!productData) {
-          return res.status(messages.response.c404.code).json({
-            message: `Product with id=${product.id} not found`,
-            data: null,
+        Product.findByPk(product.id)
+          .then((productData) => {
+            if (!productData) {
+              throw { name: `Product with id=${product.id} not found` };
+            }
+            productDatas.push(productData);
+            if (product.hasOwnProperty("quantity")) {
+              if (type === "out" && productData.stock < product.quantity) {
+                throw {
+                  name: `Product with id=${product.id} stock not enough. quantity must be less than ${productData.stock}`,
+                };
+              }
+            } else {
+              throw {
+                name: `products must have quantity`,
+              };
+            }
+          })
+          .catch((error) => {
+            next(error);
           });
-        }
-        productDatas.push(productData);
-
-        if (product.hasOwnProperty("quantity")) {
-          if (type === "out" && productData.stock < product.quantity) {
-            return res.status(messages.response.c400.code).json({
-              message: `Product with id=${product.id} stock not enough. quantity must be less than ${productData.stock}`,
-              data: null,
-            });
-          }
-        } else {
-          return res.status(messages.response.c400.code).json({
-            message: "products must have quantity",
-            data: null,
-          });
-        }
       } else {
-        return res.status(messages.response.c400.code).json({
-          message: "products must have id",
-          data: null,
-        });
+        throw {
+          name: `products must have id`,
+        };
       }
     });
 
@@ -52,10 +47,10 @@ const create = async (req, res, next) => {
     };
 
     Transaction.create(data)
-      .then(async (data) => {
+      .then((data) => {
         let promises = [];
 
-        products.forEach(async (product) => {
+        products.forEach((product) => {
           promises.push(
             ProductTransaction.create({
               product: product.id,
@@ -67,14 +62,19 @@ const create = async (req, res, next) => {
 
         Promise.all(promises)
           .then((data) => {
-            products.forEach(async (product) => {
-              const productData = await Product.findByPk(product.id);
-              if (type === "out") {
-                productData.stock = productData.stock - product.quantity;
-              } else {
-                productData.stock = productData.stock + product.quantity;
-              }
-              productData.save();
+            products.forEach((product) => {
+              Product.findByPk(product.id)
+                .then((productData) => {
+                  if (type === "out") {
+                    productData.stock = productData.stock - product.quantity;
+                  } else {
+                    productData.stock = productData.stock + product.quantity;
+                  }
+                  productData.save();
+                })
+                .catch((error) => {
+                  next(error);
+                });
             });
 
             return res.status(messages.response.c201.code).json({

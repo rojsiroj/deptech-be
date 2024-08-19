@@ -57,6 +57,10 @@ module.exports = (err, req, res, next) => {
       status = 404;
       message = err.name;
       break;
+    default:
+      status = 400;
+      message = err.name;
+      break;
   }
   res.status(status).json({ message, data: null });
 };
